@@ -14,7 +14,7 @@ true_list = [] # list which contains pits
 
 for i in range(len(arr)):
     for j in range(len(arr[i])): 
-        if (i == len(arr)-1) | (i == 0): # drop of upside and down rows
+        if (i == len(arr)-1) | (i == 0): # drop off upside and down rows
             break
         if (j != 0) & ((arr[i][j] == arr[i][-1]) == False): # drop of left and right columns
             pit = arr[i][j] # targeting at center
