@@ -8,9 +8,9 @@ arr = [[3,3],
 # output = 1
 
 # if a[i][j] is on edge => skip
-# elif a[i][j] is has neighbors => find the min value => add to counter
+# elif a[i][j] has neighbors => find the min value => add to counter
 
-true_list = []
+true_list = [] # list which contains pits
 
 for i in range(len(arr)):
     for j in range(len(arr[i])): 
