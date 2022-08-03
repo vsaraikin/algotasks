@@ -1,6 +1,3 @@
-from itertools import chain
-
-
 counter = 0
 n = 1000
 
