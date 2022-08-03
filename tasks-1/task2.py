@@ -10,4 +10,3 @@ for i in range(len(arr)):
         arr[i] = 0
         
 print(arr)
-        
