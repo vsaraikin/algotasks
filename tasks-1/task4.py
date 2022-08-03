@@ -3,9 +3,9 @@ import random
 # generate sequence
 def generate_sequence() -> str:
     x = '0.'
-    for _ in range(1000000):
-        x += str(random.randint(1, 100000))
-    return x
+    for i in range(1_000_001):
+        yield str(i)
+
 
 s = generate_sequence()
 
@@ -22,15 +22,18 @@ def generate_list() -> list:
         
         
 list_indexes = generate_list()
-
+print(list_indexes)
 def res(s, list_indexes):
-    s = s[1:] # remove dot and zero
+    location = 0
     res = 1
-    for i in range(1, len(s)):
-        if i in list_indexes:
-            print(s[i])
-            res *= int(s[i])
-        
+    for i in s:
+        for x in i:
+            if location in list_indexes:
+                print(x)
+                res *= int(x)
+            location += 1
     return res
+        
 
+# Printing the result of the function res.
 print(res(s, list_indexes))
