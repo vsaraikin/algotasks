@@ -31,8 +31,10 @@ def generate_radical_series(N):
     radicals_store = {k: v for k, v in sorted(radicals_store.items(), key=lambda item: item[1])}
     return radicals_store
 
-def get_K_value(K):
-    store = generate_radical_series(10)
+def get_K_value(K, N):
+    store = generate_radical_series(N)
     return list(store.keys())[K-2]
-        
-print(get_K_value(6))
+
+N = 10000
+K = 10000
+print(get_K_value(K, N))
