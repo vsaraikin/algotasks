@@ -1,16 +1,24 @@
-n = 60081475143
+n = 600851475143 # 1073676287
 
-# bruteforce slow
-
-def check_if_prime(N):
-    for i in range(2, N):
+def check_if_prime(start, N):
+    for i in range(start, int(pow(N, 0.5)) + 1):
         if N % i == 0:
             return False
     return True
 
-for i in range(2, n):
-    if n % i == 0:
-        if check_if_prime(i) == True:
-            max_value = i
-    
-print(max_value)
+num = n
+
+l = []
+def func(n):
+    for i in range(2, num):
+        if (n % i == 0):
+            n = n / i
+            if (check_if_prime(2, i) == True):
+                l.append(i)
+                print(l)
+                return func(n)
+            return func(n)
+        if n == 1:
+            return max(l)
+        
+print(func(n))            
