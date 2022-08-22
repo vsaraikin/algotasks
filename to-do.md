@@ -3,7 +3,7 @@
    1. [x] Function Remove by index
    2. [x] Add element: push_first, push_last and insert
    
-2. [ ] Create customed Stack and Queue: push, pop, length
+2. [x] Create customed Stack and Queue: push, pop, length
 3. [ ] Add constructor for all this stuff
 4. [ ] Class Tree:
    1. [ ] add
