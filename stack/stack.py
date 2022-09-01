@@ -14,8 +14,8 @@ class Stack:
         pass
 
 
-storage = Stack().store
-storage.append(1)
-storage.append(2)
+storage = Stack()
+storage.push(1)
+storage.push(2)
 storage.pop()
-print(storage)
+print(storage.store)
