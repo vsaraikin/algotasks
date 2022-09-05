@@ -4,7 +4,7 @@
    2. [x] Add element: push_first, push_last and insert
    
 2. [x] Create customed Stack and Queue: push, pop, length
-3. [ ] Add constructor for all this stuff
+3. [x] Add constructor for all this stuff
 4. [ ] Class Tree:
    1. [ ] add
    2. [ ] обходы
@@ -12,11 +12,11 @@
 5. [ ] Constructor Tree (list - input). Check for prerequisites
 
 Leetcode:
-1. [ ] 98
-2. [ ] 104
+1. [ ] 98 (partly)
+2. [x] 104
 3. [ ] 108
-4. [ ] 110
-5. [ ] 112
+4. [x] 110
+5. [x] 112
 
 Recursion:
 1. [ ] Task 1
