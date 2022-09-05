@@ -9,25 +9,19 @@ class Solution:
     def __init__(self) -> None:
         self.c = 0
     
-    def maxDepth(self, root: TreeNode):
-        
-        if isinstance(root, int):
-            return self.c
-        
-        if isinstance(root, type(None)):
-            return self.c
-        
-        if root.left != None or root.right != None:
-            self.c += 1
-            
-        return max(self.maxDepth(root.left) and self.maxDepth(root.right))
     
+    def maxDepth(self,root):
+        if root is None:
+            return 0
+        else:
+            return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right))
+         
     
 root = TreeNode(3)
-root.left = 9
+root.left = TreeNode(9)
 root.right = TreeNode(20)
 root.right.left = None
-root.right.right = 7
+root.right.right = TreeNode(7)
 
 s = Solution()
 print(s.maxDepth(root))
