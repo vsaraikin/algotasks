@@ -6,7 +6,8 @@ class TreeNode:
         
         
 class Solution:
-    def isValidBST(self, root: TreeNode, lower_bound=-1e6, upper_bound=1e6) -> bool:
+    def isValidBST(self, root: TreeNode, lower_bound=-1e12, upper_bound=1e12) -> bool:
+        
         if root is None or isinstance(root, list):
             return True
         
@@ -15,7 +16,6 @@ class Solution:
         
 
         return self.isValidBST(root.left, lower_bound, root.val) and self.isValidBST(root.right, root.val, upper_bound)
-    
     
 
 s = Solution()
