@@ -39,7 +39,6 @@ class Tree:
             return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right))
 
 
-
 tree = Tree(4)
 tree.insert(tree.root, 8)
 tree.insert(tree.root, 3)
