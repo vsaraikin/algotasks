@@ -5,21 +5,21 @@
    
 2. [x] Create customed Stack and Queue: push, pop, length
 3. [x] Add constructor for all this stuff
-4. [ ] Class Tree:
-   1. [ ] add
-   2. [ ] обходы
-   3. [ ] get height of node
+4. [x] Class Tree:
+   1. [x] add
+   2. [x] обходы
+   3. [x] get height of node
 5. [ ] Constructor Tree (list - input). Check for prerequisites
 
 Leetcode:
-1. [ ] 98 (partly)
+1. [x] 98
 2. [x] 104
-3. [ ] 108
+3. [x] 108
 4. [x] 110
 5. [x] 112
 
 Recursion:
-1. [ ] Task 1
-2. [ ] Task 2
-3. [ ] Task 3
+1. [x] Task 1
+2. [x] Task 2
+3. [x] Task 3
 4. [ ] Task 4
