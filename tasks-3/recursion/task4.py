@@ -1,24 +1,30 @@
+# line = [1, 3, 4]
 line = [1, 3, 4, 1, 2]
-n, m = 0, len(line) - 1
+
+n, m = 0, -1
 
 
 first, second = [], []
 
 def func(n, m):
-    first.append(max(line[n], line[m]))
-    second.append(min(line[n + 1], line[m - 1]))
+    tmp_first_max = max(line[n], line[m])
+    first.append(tmp_first_max)
+    line.remove(tmp_first_max)
     
-    n += 1
-    m -= 1
+    tmp_second_max = max(line[n], line[m])
+    second.append(tmp_second_max)
+    line.remove(tmp_second_max)
     
-    if abs(m - n) == 0:
-        first.append(min(line[n + 1], line[n]))
+    
+    if len(line) == 1:
+        first.append(line[n])
+        print(first, second)
         
-        # print(first, second)
-    elif abs(m - n) == 1:
-        first.append(max(line[n + 1], line[n]))
-        second.append(min(line[n + 1], line[n]))
-        # print(first, second)
+    elif len(line) == 2:
+        first.append(max(line[n], line[m]))
+        second.append(min(line[n], line[m]))
+        print(first, second)
+        
     else:
         func(n, m)
         
