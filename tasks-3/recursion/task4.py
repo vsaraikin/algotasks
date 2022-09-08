@@ -1,26 +1,44 @@
-line = [3, 3, 3, 0, 1, 1, 1]
+# line = [3, 3, 3, 0, 1, 1, 1]
+line = [1, 3, 4, 1, 2]
+
+
+
+
 n, m = 0, len(line) - 1
 
+common = []
 
-first, second = [], []
 
-def func(n, m):
-    first.append(max(line[n], line[m]))
-    second.append(min(line[n], line[m]))
+class Solution:
+    def __init__(self) -> None:
+        self.counter = 0
+        self.flag = False
     
-    n += 1
-    m -= 1
-    
-    if abs(m - n) == 1:
-        first.append(max(line[n], line[m]))
-        second.append(min(line[n], line[m]))
-        print(1)
-    elif abs(m - n) == 0:
-        first.append(line[n])
-        print(0)
+    def F(self, n ,m):
+        # print(n, m)
+        self.counter += 1
+        if self.flag:
+            tmp_F = max(line[n], line[n+1])
+            # common.append(tmp_F)
+            return tmp_F
+        else:
+            return max(self.T(n+1, m), self.T(n, m-1))
 
-    else:
-        func(n, m)
+    def T(self, n, m):
+        # print(n, m)
+        self.counter += 1
+        if self.counter == len(line) - 1:
+            self.flag = True
+            tmp_T = min(line[n], line[n+1])    
+            # common.append(tmp_T)
+            return tmp_T
+        else:
+            return min(self.F(n+1, m), self.F(n, m-1))
+    
+    
+
+s = Solution()        
+s.F(n, m)
+
+print(common)
         
-func(n, m)
-print(first, second)
