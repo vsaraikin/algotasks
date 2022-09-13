@@ -7,9 +7,15 @@
 3. [x] Add constructor for all this stuff
 4. [x] Class Tree:
    1. [x] add
+   2. [x] traverse
+   3. [x] get height of node
+   4. [ ] delete
+5. [ ] Class AVS Tree:
+   1. [x] add
    2. [x] обходы
    3. [x] get height of node
-5. [ ] Constructor Tree (list - input). Check for prerequisites
+   4. [ ] delete
+6. [x] Constructor Tree (list - input). Check for prerequisites
 
 Leetcode:
 1. [x] 98
@@ -18,8 +24,18 @@ Leetcode:
 4. [x] 110
 5. [x] 112
 
-Recursion:
+Recursion (task3.docx):
 1. [x] Task 1
 2. [x] Task 2
 3. [x] Task 3
-4. [ ] Task 4
+4. [x] Task 4
+
+
+Algos from scratch:
+[ ] Eulerian Path (search)
+[ ] Bellman–Ford
+
+Graphs:
+1. [ ] 2.3
+2. [ ] Addition 1
+3. [ ] 5.2
