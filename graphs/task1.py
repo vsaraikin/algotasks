@@ -1,22 +1,18 @@
+# INPUT
 
-paths = [
-    [3, 2], # 0 1 0
-    [1, 2], # 1 0 1
-    [2, 3]  # 0 1 0
-]
+n, m = [int(x) for x in input().split()]
 
-paths = [
-    [4, 3], # 0 1 1 0
-    [1, 2], # 1 0 0 1
-    [1, 3], # 1 0 0 0
-    [2, 4]  # 0 1 0 0
-]
+paths = []
 
-matrix = [[0] * len(paths) for _ in range(len(paths))]
+for _ in range(m):
+    paths.append([int(x) for x in input().split()])
+
+
+matrix = [[0] * len(paths) for _ in range(n)]
 paths = sorted([(path[0] - 1, path[1] - 1) for path in paths])
 
-for i in range(len(matrix)):
-    for j in range(len(matrix)):
+for i in range(n):
+    for j in range(m):
         if (i, j) in paths:
             matrix[i][j] = 1
         elif (j, i) in paths:
