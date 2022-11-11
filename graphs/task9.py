@@ -13,6 +13,7 @@ A = [
 visited = set() # for checking visited peaks O(1)
 visited_list = [] # for displaying visited peaks 
 
+
 def dfs(node):
     if node not in visited:
         
@@ -35,4 +36,7 @@ not_included = all_peaks - visited
 for i in not_included:
     visited_list.append(i + 1)
     
-print(visited_list)
+d = sorted({k:v for k,v in zip(visited_list, range(1, n + 1))}.items())
+
+for i in d:
+    print(i[1], end=' ')
