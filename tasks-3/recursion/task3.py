@@ -8,40 +8,25 @@ class MosqPath:
         self.pos3 = n - 1
         self.res2 = []
         self.res3 = []
-
     
-    def two(self, qty: list):
-        """ Substracts every two steps """
-        # print('self pos2 is' ,self.pos2)
-        
-        if len(qty) < 4:
-            self.res2.insert(0, qty[0])
-            self.res2.append(quantity_mosquitos[-1])
-            return False
-        
-        self.res2.insert(0, max(qty[self.pos2 - 2], qty[self.pos2 - 3]))
-        self.pos2 -= 2
-        
-        return self.two(qty[:self.pos2]) and self.two(qty[:self.pos2 - 1])
-    
-    
-    def three(self, qty: list):
+    def substractor(self, qty: list, steps: int, results: list, positions: int):
         """ Substracts every three steps """
         # print('self pos3 is',self.pos3)
         
         if len(qty) < 4:
-            self.res3.insert(0, qty[0])
-            self.res3.append(quantity_mosquitos[-1])
+            results.insert(0, qty[0])
+            results.append(quantity_mosquitos[-1])
             return False
         
-        self.res3.insert(0, max(qty[self.pos3 - 2], qty[self.pos3 - 3]))
-        self.pos3 -= 3
+        results.insert(0, max(qty[positions - 2], qty[positions - 3]))
+        positions -= steps
         
-        return self.three(qty[:self.pos3]) and self.three(qty[:self.pos3 - 1])
+        return self.substractor(qty[:positions], steps, results, positions) and self.substractor(qty[:positions - 1], steps, results, positions)
     
+        
     def best_spots(self, qty: list):
-        self.two(qty)
-        self.three(qty)
+        self.substractor(qty, 2, self.res2, self.pos2)
+        self.substractor(qty, 3, self.res3, self.pos3)
         
         indexes_two = [quantity_mosquitos.index(i) + 1 for i in self.res2]
         indexes_three = [quantity_mosquitos.index(i) + 1 for i in self.res2]
