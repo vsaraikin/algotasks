@@ -1,3 +1,11 @@
+# n, m = [int(x) for x in input().split()]
+
+# paths = []
+
+# for _ in range(m):
+#     paths.append([int(x) for x in input().split()])
+    
+    
 n, m = 3, 3
 
 input_lines = [
@@ -6,50 +14,42 @@ input_lines = [
     [1, 2]
 ]
 
-def check_if_loop(lines: list) -> bool:
-    """ Returns True if loop was detected """
+edges = {}
+pairs_set = set()
+
+# non-oriented graph: no loops and no multiple edges (verticles which connected 2+ times)
+# mukltigraph:  no loops
+# pseudograph: everything
+
+
+loop = False
+multilple_edges = False
+
+for pair in input_lines:
     
-    for pair in lines:
-        if pair[0] == pair[1]:
-            return True
-        
-    return False
-
-
-def check_if_multiple_edges(lines: list) -> bool:
-    """ Returns True if multiple edges were detected """
+    el1, el2 = pair[0], pair[1]
     
-    unique_list = []
-    for pair in lines:
-        if pair not in unique_list:
-            unique_list.append(pair)
-        else:
-            return True
-        
-    return False
+    if el1 == el2:
+        loop = True
+    
+    if el2 > el1:
+        pairs_set.add((el2, el1))
+    else:
+        pairs_set.add((el1, el2))
 
+if len(pairs_set) == len(input_lines):
+    multilple_edges = True
+    
 
-loop_res = check_if_loop(input_lines)
-edges_res = check_if_multiple_edges(input_lines)
-
-# just a graph?
-if edges_res is False and loop_res is False:
-    print("Yes")
+# non-oriented
+if loop or multilple_edges:
+    print('Yes')
 else:
-    print("No")
-    
-    
-# multigraph
-if not loop_res:
-    print("Yes")
+    print('No')
+
+if not loop:
+    print('Yes')
 else:
-    print("No")
-
-
-
-# pseudograph
-print("Yes")
-
-
-
-
+    print('No')
+    
+print('Yes')
