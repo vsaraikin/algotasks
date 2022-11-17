@@ -6,7 +6,7 @@
 
 # Требования по методам: вставка и удаление по значению (O(n)), создание дерева из любого списка (O(nlogn)), 
 # обходы дерева (3 штуки за O(n) каждый), найти элемент по значению (O(n)), высота ((O(n))
-                                                                                  
+
                                                                                   
 class Node:
     
@@ -20,6 +20,7 @@ class Tree:
     
     def __init__(self, root: Node) -> None:
         self.root = root
+        self.parent = None
         
     def insert(self, current, val):
         if self.root is None:
@@ -36,21 +37,18 @@ class Tree:
                     current.right = Node(val)
                 else:
                     self.insert(current.right, val)
-
-
-        
-    def _min_node(self, subnode):
-        while subnode.left:
-            subnode = subnode.left
-            
-        return subnode
+                    
 
     def delete(self, current: Node, val) -> Node:
-
+    
         if current is None:
             return current
             
         elif val < current.val:
+                            
+            if current.left.val == val:
+                self.parent = current
+            
             return self.delete(current.left, val)
             
         elif val > current.val:
@@ -59,7 +57,14 @@ class Tree:
         else:
             
             if current.left is None and current.right is None: # a node has no children
-                return None  
+                
+                if self.parent.val < val:
+                    self.parent.right = None
+                
+                else:
+                    self.parent.left = None
+                    
+                return self.root  
             
             elif current.left and current.right: # a node has 2 children
                 child = current.right
@@ -69,12 +74,20 @@ class Tree:
                 
                 current.val = child.val
                 current.right = self.delete(current.right, current.val)
+                
+                return self.root
 
             else: # a node has one child
-                child = current.left if current.left else current.right
-                current = child
                 
-            return current
+                child = current.left if current.left else current.right
+                
+                if current.left:
+                    self.parent.left = child
+                    
+                else:
+                    self.parent.right = child
+                    
+                return self.root
 
 
     def inorder(self, root):
@@ -124,15 +137,16 @@ def list_to_tree(nums: list) -> Node:
 
 t = Tree(Node(50))
 t.insert(t.root, 30)
-t.insert(t.root, 20)
 t.insert(t.root, 25)
-# t.insert(t.root, 28)
+t.insert(t.root, 20)
+t.insert(t.root, 35)
+t.insert(t.root, 28)
 t.inorder(t.root)
 
 print('-' * 20)
 
 # Delete node by value
-t.root  = t.delete(t.root, 50)
+t.root  = t.delete(t.root, 20)
 t.inorder(t.root)
 
 
