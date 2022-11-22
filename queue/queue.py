@@ -1,17 +1,21 @@
+# Требования по методам: вставка и удаление (O(1)), длина (O(1))
+
+from collections import deque
+
 class Queue:
     """ FIFO array: append at the end and remove and the start of array """
 
     def __init__(self):
-        self.store = []
+        self.store = deque()
 
     def enqueue(self, element):
         self.store.append(element)
 
     def dequeue(self):
-        self.store.pop(0)  # O (N)
+        self.store.popleft()  # O (N)
 
     def __len__(self):
-        pass
+        return len(self.store)
 
 
 storage = Queue()
