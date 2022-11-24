@@ -52,21 +52,16 @@ class Tree:
             return self.delete(current.left, val)
             
         elif val > current.val:
+            
+            if current.right.val == val:
+                self.parent = current
+                
             return self.delete(current.right, val)
             
         else:
-            
-            if current.left is None and current.right is None: # a node has no children
+                        
+            if current.left and current.right: # a node has 2 children
                 
-                if self.parent.val < val:
-                    self.parent.right = None
-                
-                else:
-                    self.parent.left = None
-                    
-                return self.root  
-            
-            elif current.left and current.right: # a node has 2 children
                 child = current.right
                 
                 while child.left:
@@ -75,17 +70,25 @@ class Tree:
                 current.val = child.val
                 current.right = self.delete(current.right, current.val)
                 
-                return self.root
+                return current
 
             else: # a node has one child
                 
-                child = current.left if current.left else current.right
+                child = current.left if current.left else current.right # contains children node
                 
-                if current.left:
-                    self.parent.left = child
-                    
+                if not child:
+                    if self.parent.val < val:
+                        self.parent.right = None
+                
+                    else:
+                        self.parent.left = None
+                        
                 else:
-                    self.parent.right = child
+                    if self.parent.val < val:
+                        self.parent.right = child
+                    
+                    else:
+                        self.parent.left = child
                     
                 return self.root
 
@@ -98,6 +101,7 @@ class Tree:
             
             
     def find(self, current: Node, value):
+        
         if not current:
             return
         
@@ -105,34 +109,49 @@ class Tree:
             print('Found!')
             return current
         
-        if current.left:
-            return self.find(current.left, value)
+        if value > current.val:
+            self.find(current.right, value)
+        else:
+            self.find(current.left, value)
         
-        if current.right:
-            return self.find(current.right, value)
-
     
     def height(self, current: Node) -> int:
         if current is None:
             return 0
+        
         else:
             return 1 + max(self.height(current.left), self.height(current.right))
+    
         
+    @staticmethod
+    def list_to_tree(nums: list, start: int, end: int, flag_sort=True):
         
-def list_to_tree(nums: list) -> Node:
+        if not flag_sort:
+            nums = sorted(nums)
         
-    if not nums:
-        return None
-    
-    middle = len(nums) // 2
-    
-    tree = Node(nums[middle])
-    
-    tree.left = list_to_tree(nums[:middle])
-    tree.right = list_to_tree(nums[middle+1:])
-    
-    return tree 
- 
+        def list_to_nodes(nums: list, start: int, end: int) -> Node:
+                                
+            if not nums or start < 0 or end >= 4 or end < start:
+                return None
+            
+            if start == end:
+                res = Node(nums[start])
+                return res
+            
+            middle = int(start + (end - start) / 2)
+            
+            tree = Node(nums[middle])
+            
+            tree.left = list_to_nodes(nums, start, middle - 1)
+            tree.right = list_to_nodes(nums, middle + 1, end)
+            
+            return tree
+        nodes = list_to_nodes(nums, start, end)
+
+        return Tree(nodes)
+
+s = Tree.list_to_tree([10,20,30,40], 0, 3)
+s.inorder(s.root) 
  
 
 t = Tree(Node(50))
@@ -141,20 +160,14 @@ t.insert(t.root, 25)
 t.insert(t.root, 20)
 t.insert(t.root, 35)
 t.insert(t.root, 28)
-t.inorder(t.root)
+# t.inorder(t.root)
 
 print('-' * 20)
 
 # Delete node by value
-t.root  = t.delete(t.root, 20)
+t.root  = t.delete(t.root, 25)
 t.inorder(t.root)
 
-
-# List to tree
-# tree = list_to_tree([10,20,30,40]) # sorted array as input
-# t = Tree(tree)
-# t.inorder(t.root)
-
 # Find
-# t.find(t.root, 20)
+t.find(t.root, 20)
 
