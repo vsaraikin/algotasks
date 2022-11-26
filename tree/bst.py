@@ -150,24 +150,25 @@ class Tree:
 
         return Tree(nodes)
 
-s = Tree.list_to_tree([10,20,30,40], 0, 3)
-s.inorder(s.root) 
  
+if __name__ == '__main__':
+    s = Tree.list_to_tree([10,20,30,40], 0, 3)
+    s.inorder(s.root) 
+    
+    t = Tree(Node(50))
+    t.insert(t.root, 30)
+    t.insert(t.root, 25)
+    t.insert(t.root, 20)
+    t.insert(t.root, 35)
+    t.insert(t.root, 28)
+    # t.inorder(t.root)
 
-t = Tree(Node(50))
-t.insert(t.root, 30)
-t.insert(t.root, 25)
-t.insert(t.root, 20)
-t.insert(t.root, 35)
-t.insert(t.root, 28)
-# t.inorder(t.root)
+    print('-' * 20)
 
-print('-' * 20)
+    # Delete node by value
+    t.root  = t.delete(t.root, 25)
+    t.inorder(t.root)
 
-# Delete node by value
-t.root  = t.delete(t.root, 25)
-t.inorder(t.root)
-
-# Find
-t.find(t.root, 20)
+    # Find
+    t.find(t.root, 20)
 
