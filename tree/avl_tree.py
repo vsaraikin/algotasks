@@ -21,6 +21,7 @@ class AVL_Tree(Tree):
     def __init__(self, root: Node) -> None:
         self.root = root
     
+    
     def lr(self, current):
         tmp_right = current.right
         tmp_right_left = tmp_right.left
@@ -43,8 +44,29 @@ class AVL_Tree(Tree):
         tmp_left.height = 1 + max(self.get_current_height(tmp_left.left), self.get_current_height(tmp_left.right))
         
         return tmp_left
+         
+    
+    def get_current_height(self, current):
+        if not current:
+            return 0
+        
+        return current.height
+ 
+ 
+    def balance_factor(self, current):
+        if not current:
+            return 0
+        
+        return self.get_current_height(current.left) - self.get_current_height(current.right)
+    
+    
+    def min_value(self, current):
+        if not current or not current.left:
+            return current
+        
+        return self.min_value(current.left)
      
-                           
+    
     def insert(self, current, value):
  
         if not current:
@@ -74,71 +96,57 @@ class AVL_Tree(Tree):
 
         self.root = current
         return current
-    
-    
-    def get_current_height(self, current):
-        if not current:
-            return 0
-        
-        return current.height
- 
- 
-    def balance_factor(self, current):
-        if not current:
-            return 0
-        
-        return self.get_current_height(current.left) - self.get_current_height(current.right)
-    
-    
-    def min_value(self, current):
-        if not current or not current.left:
-            return current
-        
-        return self.min_value(current.left)
-        
+     
+     
     def delete(self, current, value):
-        
+ 
         if not current:
             return current
+        
         elif value < current.val:
             current.left = self.delete(current.left, value)
+        
         elif value > current.val:
             current.right = self.delete(current.right, value)
+        
         else:
+            
             if not current.left:
                 tmp = current.right
                 current = None
                 return tmp
+            
             elif not current.right:
                 tmp = current.left
                 current = None
                 return tmp
+            
             tmp = self.min_value(current.right)
-            current.right = tmp.val
+            current.val = tmp.val
             current.right = self.delete(current.right, tmp.val)
-        
-        if not current:
-            return current
         
         current.height = 1 + max(self.get_current_height(current.left), self.get_current_height(current.right))
         bf = self.balance_factor(current)
-        
+ 
         if bf > 1:
+            
             if self.balance_factor(current.left) >= 0:
                 return self.rr(current)
+            
             else:
                 current.left = self.lr(current.left)
                 return self.rr(current)
         
         if bf < -1:
+            
             if self.balance_factor(current.right) <= 0:
                 return self.lr(current)
+            
             else:
                 current.right = self.rr(current.right)
                 return self.lr(current)
-            
+
         return current
-                    
                     
 t = AVL_Tree(Node(50))
 t.insert(t.root, 30)
@@ -146,5 +154,5 @@ t.insert(t.root, 25)
 t.insert(t.root, 20)
 t.insert(t.root, 35)
 t.insert(t.root, 28)
-t.delete(t.root, 25)
+t.delete(t.root, 25) 
 t.inorder(t.root)
