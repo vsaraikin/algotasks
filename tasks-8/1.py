@@ -38,7 +38,7 @@ class Figure(ABC):
 
 class Dot(Figure):
     """
-    Simply a dot in a one-dimensional space
+    a dot in a one-dimensional space
     """
 
     def __init__(self, x: int):
@@ -87,9 +87,15 @@ class Dot(Figure):
         return self.x >= other
 
 
+dot = Dot(1)
+print(dot + 2)
+print(dot * 2)
+print(dot >= 2)
+
+
 class Line(Figure):
     """
-    One-dimensional line which has start and finish points
+    one-dimensional line which has start and finish points
     """
 
     def __init__(self, a, b):
@@ -109,13 +115,21 @@ class Line(Figure):
     def square(self):
         return 0
 
+    def __add__(self, term: int) -> int:
+        return (self.b + term) / 2
+
+    def __sub__(self, subtrahend: int) -> int:
+        return (self.b - subtrahend) / 2
+
+    def __mul__(self, mult: int):
+        self.b *= mult
+        return self.b
+
     def __truediv__(self, divider: int) -> Tuple[float]:
-        self.a /= divider
         self.b /= divider
         return self.a, self.b
 
     def __floordiv__(self, divider: int) -> Tuple[int]:
-        self.a //= divider
         self.b //= divider
         return self.a, self.b
 
@@ -135,11 +149,17 @@ class Line(Figure):
         return self.b - self.a >= abs(o[1] - o[0])
 
 
-# o = Line(2, 3)
-# print(o / 2)
+o = Line(2, 3)
+print(o * 2)
+print(o / 2)
 
 
 class Triangle(Figure):
+    
+    """
+    triangle in 2-dimensional space with 3 coordinates
+    """
+    
     def __init__(self, x1, y1, x2, y2, x3, y3):
         self.x1 = x1
         self.y1 = y1
@@ -147,11 +167,12 @@ class Triangle(Figure):
         self.y2 = y2
         self.x3 = x3
         self.y3 = y3
-        self.a = self.calc_length(self.x1, self.y1, self.x2, self.y2)
-        self.b = self.calc_length(self.x2, self.y2, self.x3, self.y3)
-        self.c = self.calc_length(self.x1, self.y1, self.x3, self.y3)
+        self._a = self._calc_length(self.x1, self.y1, self.x2, self.y2)
+        self._b = self._calc_length(self.x2, self.y2, self.x3, self.y3)
+        self._c = self._calc_length(self.x1, self.y1, self.x3, self.y3)
+        
 
-    def calc_length(self, a1: int, b1: int, a2: int, b2: int) -> float:
+    def _calc_length(self, a1: int, b1: int, a2: int, b2: int) -> float:
         return pow(pow(a2 - a1, 2) + pow(b2 - b1, 2), 0.5)
 
     def error(self, obj: object):
@@ -165,18 +186,26 @@ class Triangle(Figure):
     def str_type(self):
         return "Triangle"
 
-    def perimeter(self) -> float:
-        return self.a + self.b + self.c
+    def _perimeter(self, a: int, b: int, c: int) -> float:
+        return a + b + c
 
-    def square(self) -> float:
+    def _square(self, a: int, b: int, c: int) -> float:
+        P = self._perimeter(a, b, c)
         return pow(
-            self.perimeter()
-            / 2
-            * (self.perimeter() / 2 - self.a)
-            * (self.perimeter() / 2 - self.b)
-            * (self.perimeter() / 2 - self.c),
+            P / 2
+            * (P / 2 - a)
+            * (P / 2 - b)
+            * (P / 2 - c),
             0.5,
         )
+        
+    @property
+    def perimeter(self) -> float:
+        return Triangle._perimeter(self, self._a, self._b, self._c)
+    
+    @property
+    def square(self) -> float:
+        return Triangle._square(self, self._a, self._b, self._c)
 
     def __add__(self, term: int) -> float:
         self.x2 += term
@@ -213,38 +242,56 @@ class Triangle(Figure):
         self.y3 //= divider
         return self.get_corrdinates()
 
-    def __eq__(
-        self, o: Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]]
-    ) -> bool:
-        return self.square(self.get_corrdinates()) == self.square(o)
+    def __eq__(self, object: Tuple[int]) -> float:
+        x1, y1, x2, y2, x3, y3 = object
+        a = self._calc_length(x1, y1, x2, y2)
+        b = self._calc_length(x2, y2, x3, y3)
+        c = self._calc_length(x1, y1, x3, y3)
+        return self.square == self._square(a, b, c)
 
-    def __lt__(
-        self, o: Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]]
-    ) -> bool:
-        return self.square(self.get_corrdinates()) < self.square(o)
-
-    def __le__(
-        self, o: Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]]
-    ) -> bool:
-        return self.square(self.get_corrdinates()) <= self.square(o)
-
-    def __gt__(
-        self, o: Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]]
-    ) -> bool:
-        return self.square(self.get_corrdinates()) > self.square(o)
-
-    def __ge__(
-        self, o: Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]]
-    ) -> bool:
-        return self.square(self.get_corrdinates()) >= self.square(o)
+    def __lt__(self, object: Tuple[int]) -> float:
+        x1, y1, x2, y2, x3, y3 = object
+        a = self._calc_length(x1, y1, x2, y2)
+        b = self._calc_length(x2, y2, x3, y3)
+        c = self._calc_length(x1, y1, x3, y3)
+        return self.square < self._square(a, b, c)
 
 
-# tr = Triangle(1, 1, 3, 4, 3, 1)
+    def __le__(self, object: Tuple[int]):
+        x1, y1, x2, y2, x3, y3 = object
+        a = self._calc_length(x1, y1, x2, y2)
+        b = self._calc_length(x2, y2, x3, y3)
+        c = self._calc_length(x1, y1, x3, y3)
+        return self.square <= self._square(a, b, c)
 
-# print(tr.perimeter())
+    def __gt__(self, object: Tuple[int]):
+        x1, y1, x2, y2, x3, y3 = object
+        a = self._calc_length(x1, y1, x2, y2)
+        b = self._calc_length(x2, y2, x3, y3)
+        c = self._calc_length(x1, y1, x3, y3)
+        return self.square > self._square(a, b, c)
+
+    def __ge__(self, object: Tuple[int]):
+        x1, y1, x2, y2, x3, y3 = object
+        a = self._calc_length(x1, y1, x2, y2)
+        b = self._calc_length(x2, y2, x3, y3)
+        c = self._calc_length(x1, y1, x3, y3)
+        return self.square >= self._square(a, b, c)
+
+
+tr = Triangle(1, 1, 3, 4, 3, 1)
+print(tr + 2)
+print(tr.perimeter)
+print(tr.square)
+print(tr == (1, 1, 3, 4, 3, 1))
 
 
 class Rectungular(Figure):
+    
+    """
+    rectungular in 2-dimensional space with 4 coordinates
+    """
+    
     def __init__(self, x1, y1, x2, y2, x3, y3, x4, y4):
         self.x1 = x1
         self.y1 = y1
@@ -254,12 +301,11 @@ class Rectungular(Figure):
         self.y3 = y3
         self.x4 = x4
         self.y4 = y4
-        self.a = self.calc_length(self.x1, self.y1, self.x2, self.y2)
-        self.b = self.calc_length(self.x2, self.y2, self.x3, self.y3)
-        self.c = self.calc_length(self.x4, self.y4, self.x3, self.y3)
-        self.d = self.calc_length(self.x1, self.y1, self.x4, self.y4)
+        self._a = self._calc_length(self.x1, self.y1, self.x2, self.y2)
+        self._b = self._calc_length(self.x1, self.y1, self.x3, self.y3)
+        
 
-    def calc_length(self, a1: int, b1: int, a2: int, b2: int) -> float:
+    def _calc_length(self, a1: int, b1: int, a2: int, b2: int) -> float:
         return pow(pow(a2 - a1, 2) + pow(b2 - b1, 2), 0.5)
 
     def error(self, obj: object):
@@ -268,96 +314,97 @@ class Rectungular(Figure):
     def get_corrdinates(
         self,
     ) -> Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]]:
-        return (
-            (self.x1, self.y1),
-            (self.x2, self.y2),
-            (self.x3, self.y3),
-            (self.x4, self.y4),
-        )
+        return ((self.x1, self.y1), (self.x2, self.y2), (self.x3, self.y3), (self.x4, self.y4))
 
     def str_type(self):
         return "Rectungular"
 
-    def perimeter(self) -> float:
-        return self.a + self.b + self.c + self.d
+    def _perimeter(self, a: int, b: int) -> float:
+        return a + b
 
+    def _square(self, a: int, b: int) -> float:
+        return a * b
+        
+    @property
+    def perimeter(self) -> float:
+        return Rectungular._perimeter(self, self._a, self._b)
+    
+    @property
     def square(self) -> float:
-        return self.a * self.b
+        return Rectungular._square(self, self._a, self._b)
 
     def __add__(self, term: int) -> float:
-        self.x2 += term
         self.y2 += term
         self.x3 += term
-        self.y3 += term
-        self.x4 = self.b + self.x1
-        self.y4 = self.a + self.y1
-
+        self.x4 += term
+        self.y4 += term 
         return self.get_corrdinates()
 
     def __sub__(self, subtrahend: int) -> float:
-        self.x2 -= subtrahend
         self.y2 -= subtrahend
         self.x3 -= subtrahend
-        self.y3 -= subtrahend
-        self.x4 = self.b - self.x1
-        self.y4 = self.a - self.y1
-
+        self.x4 -= subtrahend
+        self.y4 -= subtrahend
         return self.get_corrdinates()
 
     def __mul__(self, mult: int) -> float:
-        self.x2 *= mult
         self.y2 *= mult
         self.x3 *= mult
-        self.y3 *= mult
-        self.x4 = self.b - self.x1
-        self.y4 = self.a - self.y1
-
+        self.x4 *= mult
+        self.y4 *= mult 
         return self.get_corrdinates()
 
     def __truediv__(self, divider: int) -> float:
-        self.x2 /= divider
         self.y2 /= divider
         self.x3 /= divider
-        self.y3 /= divider
-        self.x4 = self.b - self.x1
-        self.y4 = self.a - self.y1
-
+        self.x4 /= divider
+        self.y4 /= divider 
         return self.get_corrdinates()
 
     def __floordiv__(self, divider: int) -> float:
-        self.x2 //= divider
         self.y2 //= divider
         self.x3 //= divider
-        self.y3 //= divider
-        self.x4 = self.b - self.x1
-        self.y4 = self.a - self.y1
-
+        self.x4 //= divider
+        self.y4 //= divider 
         return self.get_corrdinates()
 
-    def __eq__(
-        self, o: Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]]
-    ) -> bool:
-        return self.square(self.get_corrdinates()) == self.square(o)
+    def __eq__(self, object: Tuple[int]) -> bool:
+        x1, y1, x2, y2, x3, y3 = object
+        a = self._calc_length(x1, y1, x2, y2)
+        b = self._calc_length(x1, y1, x3, y3)
+        return self.square == self._square(a, b,)
 
-    def __lt__(
-        self, o: Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]]
-    ) -> bool:
-        return self.square(self.get_corrdinates()) < self.square(o)
+    def __lt__(self, object: Tuple[int])  -> bool:
+        x1, y1, x2, y2, x3, y3 = object
+        a = self._calc_length(x1, y1, x2, y2)
+        b = self._calc_length(x1, y1, x3, y3)
+        return self.square < self._square(a, b,)
 
-    def __le__(
-        self, o: Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]]
-    ) -> bool:
-        return self.square(self.get_corrdinates()) <= self.square(o)
+    def __le__(self, object: Tuple[int]) -> bool:
+        x1, y1, x2, y2, x3, y3 = object
+        a = self._calc_length(x1, y1, x2, y2)
+        b = self._calc_length(x1, y1, x3, y3)
+        return self.square <= self._square(a, b,)
 
-    def __gt__(
-        self, o: Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]]
-    ) -> bool:
-        return self.square(self.get_corrdinates()) > self.square(o)
+    def __gt__(self, object: Tuple[int]) -> bool:
+        x1, y1, x2, y2, x3, y3 = object
+        a = self._calc_length(x1, y1, x2, y2)
+        b = self._calc_length(x1, y1, x3, y3)
+        return self.square > self._square(a, b,)
 
-    def __ge__(
-        self, o: Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]]
-    ) -> bool:
-        return self.square(self.get_corrdinates()) >= self.square(o)
+    def __ge__(self, object: Tuple[int]) -> bool:
+        x1, y1, x2, y2, x3, y3 = object
+        a = self._calc_length(x1, y1, x2, y2)
+        b = self._calc_length(x1, y1, x3, y3)
+        return self.square >= self._square(a, b,)
+
+
+
+rec = Rectungular(0, 0, 0, 2, 3, 2, 3, 0)
+print(rec.perimeter)
+print(rec.square)
+print(rec > (0, 0, 0, 2, 3, 2))
+
 
 
 class Sqaure(Rectungular):
@@ -366,7 +413,14 @@ class Sqaure(Rectungular):
 
     def str_type(self):
         return "Sqaure"
+    
 
+
+sq = Sqaure(0, 0, 0, 2, 3, 2, 3, 0)
+print(sq.perimeter)
+print(sq.square)
+print(sq < (0, 0, 1, 1, 1, 1))
+print(sq.str_type())
 
 class Circle(Figure):
     def __init__(self, r: int, x: int, y: int):
@@ -374,80 +428,74 @@ class Circle(Figure):
         self.x = x
         self.y = y
 
-    def calc_length(self, a1: int, b1: int, a2: int, b2: int) -> float:
-        return pow(pow(a2 - a1, 2) + pow(b2 - b1, 2), 0.5)
 
     def error(self, obj: object):
         raise TypeError(obj)
 
-    def get_corrdinates(
-        self,
-    ) -> Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]]:
+    def get_corrdinates(self) -> Tuple[int]:
         return (
-            (self.x1, self.y1),
-            (self.x2, self.y2),
-            (self.x3, self.y3),
-            (self.x4, self.y4),
+            (self.x - self.r, self.y),
+            (self.x, self.r + self.y),
+            (self.x + self.r, self.y),
+            (self.x, self.x - self.r)
         )
 
     def str_type(self):
         return "Circle"
 
+    def _perimeter(self, r: int) -> float:
+        return 2 * pi * r
+
+    def _square(self, r: int) -> float:
+        return r * pi**2
+    
+    @property
     def perimeter(self) -> float:
-        return 2 * pi * self.r
+        return self._perimeter(self.r)
 
+    @property
     def square(self) -> float:
-        return self.r * pi**2
-
+        return self._square(self.r)
+    
     def __add__(self, term: int) -> float:
         self.r += term
-
         return self.get_corrdinates()
 
     def __sub__(self, subtrahend: int) -> float:
         self.r -= subtrahend
-
         return self.get_corrdinates()
 
     def __mul__(self, mult: int) -> float:
         self.r *= mult
-
         return self.get_corrdinates()
 
     def __truediv__(self, divider: int) -> float:
         self.r /= divider
-
         return self.get_corrdinates()
 
     def __floordiv__(self, divider: int) -> float:
-        self.r //= divider
-
+        self.r /= divider
         return self.get_corrdinates()
 
-    def __eq__(
-        self, o: Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]]
-    ) -> bool:
-        return self.square(self.get_corrdinates()) == self.square(o)
+    def __eq__(self, object: int) -> bool:
+        return self.square == self._square(object)
 
-    def __lt__(
-        self, o: Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]]
-    ) -> bool:
-        return self.square(self.get_corrdinates()) < self.square(o)
+    def __lt__(self, object: int) -> bool:
+        return self.square < self._square(object)
 
-    def __le__(
-        self, o: Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]]
-    ) -> bool:
-        return self.square(self.get_corrdinates()) <= self.square(o)
+    def __le__(self, object: int) -> bool:
+        return self.square <= self._square(object)
 
-    def __gt__(
-        self, o: Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]]
-    ) -> bool:
-        return self.square(self.get_corrdinates()) > self.square(o)
+    def __gt__(self, object: int) -> bool:
+        return self.square > self._square(object)
 
-    def __ge__(
-        self, o: Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]]
-    ) -> bool:
-        return self.square(self.get_corrdinates()) >= self.square(o)
+    def __ge__(self, object: int) -> bool:
+        return self.square >= self._square(object)
+
+c = Circle(4, 1, 1)
+print(c.square)
+print(c.perimeter)
+print(c >= 2)
 
 
 class Ellipse(Circle):
@@ -460,46 +508,73 @@ class Ellipse(Circle):
     def error(self, obj: object):
         raise TypeError(obj)
 
-    def get_corrdinates(
-        self,
-    ) -> Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int]]:
+    def get_corrdinates(self) -> Tuple[int]:
         return (
-            (self.x1, self.y1),
-            (self.x2, self.y2),
-            (self.x3, self.y3),
-            (self.x4, self.y4),
+            (self.x - self.r1, self.y),
+            (self.x, self.r2 + self.y),
+            (self.x + self.r1, self.y),
+            (self.x, self.y - self.r2)
         )
 
     def str_type(self):
-        return "Circle"
+        return "Ellipse"
 
+    def _perimeter(self, r1: int, r2: int) -> float:
+        return 2 * pi * pow((r1 + r2) / 2, 0.5)
+
+    def _square(self, r1: int, r2: int) -> float:
+        return r1 * r2 * pi
+     
+    @property
     def perimeter(self) -> float:
-        return 2 * pi * pow((self.r1 + self.r2) / 2, 0.5)
+        return self._perimeter(self.r1, self.r2)
 
+    @property
     def square(self) -> float:
-        return self.r1 * self.r2 * pi
+        return self._square(self.r1, self.r2)
 
     def __add__(self, term: int) -> float:
-        self.r += term
-
+        self.r1 += term
+        self.r2 += term
         return self.get_corrdinates()
 
     def __sub__(self, subtrahend: int) -> float:
-        self.r -= subtrahend
-
+        self.r1 -= subtrahend
+        self.r2 -= subtrahend
         return self.get_corrdinates()
 
     def __mul__(self, mult: int) -> float:
-        self.r *= mult
-
+        self.r1 *= mult
+        self.r2 *= mult
         return self.get_corrdinates()
 
     def __truediv__(self, divider: int) -> float:
-        self.r /= divider
-
+        self.r1 /= divider
+        self.r2 /= divider
         return self.get_corrdinates()
 
     def __floordiv__(self, divider: int) -> float:
-        self.r //= divider
-
+        self.r1 //= divider
+        self.r2 //= divider
         return self.get_corrdinates()
+
+    def __eq__(self, object: Tuple[int]) -> bool:
+        return self.square == self._square(object[0], object[1])
+
+    def __lt__(self, object: Tuple[int]) -> bool:
+        return self.square < self._square(object[0], object[1])
+
+    def __le__(self, object: Tuple[int]) -> bool:
+        return self.square <= self._square(object[0], object[1])
+
+    def __gt__(self, object: Tuple[int]) -> bool:
+        return self.square > self._square(object[0], object[1])
+
+    def __ge__(self, object: Tuple[int]) -> bool:
+        return self.square >= self._square(object[0], object[1])
+
+
+e = Ellipse(4, 2, 1, 1)
+print(e.square)
+print(e.perimeter)
+print(e >= (2, 1))
