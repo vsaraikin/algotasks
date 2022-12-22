@@ -17,22 +17,17 @@ from math import pi
 
 
 class Figure(ABC):
+    
     @abstractmethod
-    def str_type(
-        self,
-    ):
+    def str_type(self):
         pass
 
     @abstractmethod
-    def perimeter(
-        self,
-    ):
+    def perimeter(self):
         pass
 
     @abstractmethod
-    def square(
-        self,
-    ):
+    def square(self):
         pass
 
 
@@ -74,23 +69,19 @@ class Dot(Figure):
     def __eq__(self, o: object) -> bool:
         return self.x == o
 
-    def __lt__(self, other) -> bool:
+    def __lt__(self, other: int) -> bool:
         return self.x < other
 
-    def __le__(self, other) -> bool:
+    def __le__(self, other: int) -> bool:
         return self.x <= other
 
-    def __gt__(self, other) -> bool:
+    def __gt__(self, other: int) -> bool:
         return self.x > other
 
-    def __ge__(self, other) -> bool:
+    def __ge__(self, other: int) -> bool:
         return self.x >= other
 
 
-dot = Dot(1)
-print(dot + 2)
-print(dot * 2)
-print(dot >= 2)
 
 
 class Line(Figure):
@@ -98,7 +89,7 @@ class Line(Figure):
     one-dimensional line which has start and finish points
     """
 
-    def __init__(self, a, b):
+    def __init__(self, a: int, b: int):
         if a <= b:
             self.a = a
             self.b = b
@@ -148,10 +139,6 @@ class Line(Figure):
     def __ge__(self, o: Tuple[object, object]) -> bool:
         return self.b - self.a >= abs(o[1] - o[0])
 
-
-o = Line(2, 3)
-print(o * 2)
-print(o / 2)
 
 
 class Triangle(Figure):
@@ -279,11 +266,7 @@ class Triangle(Figure):
         return self.square >= self._square(a, b, c)
 
 
-tr = Triangle(1, 1, 3, 4, 3, 1)
-print(tr + 2)
-print(tr.perimeter)
-print(tr.square)
-print(tr == (1, 1, 3, 4, 3, 1))
+
 
 
 class Rectungular(Figure):
@@ -400,29 +383,18 @@ class Rectungular(Figure):
 
 
 
-rec = Rectungular(0, 0, 0, 2, 3, 2, 3, 0)
-print(rec.perimeter)
-print(rec.square)
-print(rec > (0, 0, 0, 2, 3, 2))
-
-
-
 class Sqaure(Rectungular):
+    
     def __init__(self, x1, y1, x2, y2, x3, y3, x4, y4):
         super().__init__(x1, y1, x2, y2, x3, y3, x4, y4)
 
     def str_type(self):
         return "Sqaure"
-    
 
 
-sq = Sqaure(0, 0, 0, 2, 3, 2, 3, 0)
-print(sq.perimeter)
-print(sq.square)
-print(sq < (0, 0, 1, 1, 1, 1))
-print(sq.str_type())
 
 class Circle(Figure):
+    
     def __init__(self, r: int, x: int, y: int):
         self.r = r
         self.x = x
@@ -492,13 +464,10 @@ class Circle(Figure):
     def __ge__(self, object: int) -> bool:
         return self.square >= self._square(object)
 
-c = Circle(4, 1, 1)
-print(c.square)
-print(c.perimeter)
-print(c >= 2)
 
 
 class Ellipse(Circle):
+    
     def __init__(self, r1: int, r2: int, x: int, y: int):
         self.r1 = r1
         self.r2 = r2
@@ -574,7 +543,42 @@ class Ellipse(Circle):
         return self.square >= self._square(object[0], object[1])
 
 
-e = Ellipse(4, 2, 1, 1)
-print(e.square)
-print(e.perimeter)
-print(e >= (2, 1))
+if __name__ == '__main__':
+    dot = Dot(1)
+    print(dot + 2)
+    print(dot * 2)
+    print(dot >= 2)
+
+
+    o = Line(2, 3)
+    print(o * 2)
+    print(o / 2)
+
+
+    tr = Triangle(1, 1, 3, 4, 3, 1)
+    print(tr + 2)
+    print(tr.perimeter)
+    print(tr.square)
+    print(tr == (1, 1, 3, 4, 3, 1))
+
+    rec = Rectungular(0, 0, 0, 2, 3, 2, 3, 0)
+    print(rec.perimeter)
+    print(rec.square)
+    print(rec > (0, 0, 0, 2, 3, 2))
+
+    sq = Sqaure(0, 0, 0, 2, 3, 2, 3, 0)
+    print(sq.perimeter)
+    print(sq.square)
+    print(sq < (0, 0, 1, 1, 1, 1))
+    print(sq.str_type())
+
+    c = Circle(4, 1, 1)
+    print(c.square)
+    print(c.perimeter)
+    print(c >= 2)
+
+
+    e = Ellipse(4, 2, 1, 1)
+    print(e.square)
+    print(e.perimeter)
+    print(e >= (2, 1))
